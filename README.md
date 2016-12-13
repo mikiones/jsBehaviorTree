@@ -1,30 +1,60 @@
 # jsBehaviorTree
-simple js Behaviour tree implementation takes dictonary as input where 
+simple js Behaviour tree implementation takes dictonary as input where
+
+Example tree
+```javascript
+  let simpleTree = {
+    $des:"a simple tree", // descryption of this level
+    $seq:[ // a seqence
+      "action1", // names action in $act section
+      "test.action1", // can be nested
+      $SUCCESS, // can be a state
+      (action,mem) => $SUCCESS, // can be a function
+    ],
+    $act:{ // place to define action for tree
+      action1:function(actor, memory) {
+        return $SUCCESS;
+      },
+      test: {
+        action1:(actor,mem) => $FAILURE,
+      }
+    }
+  };
+  let act = {};
+  let mem = {};
+  // evaulate tree until finish or $RUNNING State is returnd
+  BT.runBt(act,mem,simpleTree);
+```
 
 states:
-$SUCCESS = succes node
-$FAILURE = failure node
-$RUNNING = running node 
+  1. $SUCCESS = success node
+  2. $FAILURE = failure node
+  3. $RUNNING = running node
 
-opertions:
-$seq: sequence takes array as input
-  {
-    seq:[$SUCCESS,$SUCCESS,$RUNNING]
+nodes:
+1. $seq: sequence takes array of childs as input
+```javascript
+    var tree = {
+      $seq:[$SUCCESS,$SUCCESS,$RUNNING]
+    }
+```
+2. $sel: selector takss array as input
+```javascript
+  var tree = {
+    $sel:[$FAILURE,$SUCCESS,$RUNNING]
   }
-  
-$sel: selector takss array as input
-  {
-    sel:[$FAILURE,$SUCCESS,$RUNNING]
-  }
-  
-$node : a row node 
-  {
+```
+
+3. $node : a row node
+```javascript
+var tree = {
     $des:"a succesful node",
-    $node:$SUCCESS
+    $node:$SUCCESS,
   }
+```
 
 Actions:
-actoins are a function wiych to takses a actor and a memory as input and return valid state 
+actoins are a function wiych to takses a actor and a memory as input and return valid state
 var a = function (actor, memory) {
   return $SUCCESS
 }
@@ -57,5 +87,3 @@ if - then -else
   $THEN:$RUNNING,
   $else:$FAILURE
 }
-
-
