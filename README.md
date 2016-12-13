@@ -68,7 +68,7 @@ var tree = {
 } // will evel to $FAILURE
 ```
 6. Actions takes actor and memort as input and return state:
- i. Named: actions can be named by palcing them in a `$act` section of tree: 
+ * Named: actions can be named by palcing them in a `$act` section of tree: 
  ``` javascript
  let tree = {
   $sel:["action"],
@@ -77,7 +77,7 @@ var tree = {
   }
  } // will eval to SUCCESS.
  ```
- ii. nested 
+ * nested 
  ```javascript
   let tree = {
     $sel:["a.nested.action"],
@@ -91,7 +91,7 @@ var tree = {
   } // eval to $SUCCESS
  ```
  
- iii. anoumynous/inline
+ * anoumynous/inline
  ```javascript
  let tree = {
   $sel:[()=>$SUCCESS]
