@@ -38,12 +38,15 @@ nodes:
       $seq:[$SUCCESS,$SUCCESS,$RUNNING]
     } // will eval to $RUNNING (sequnce is running until faiure or running
  ```
+ 
+ 
 * `$sel`: selector takss array as input
  ```javascript
   var tree = {
     $sel:[$FAILURE, $SUCCESS, $RUNNING]
   } // will eval to $SUCCESS as selector chose first not failing path
  ```
+
 
 * `$node` : a row node
  ```javascript
@@ -52,6 +55,8 @@ nodes:
     $node:$SUCCESS,
   } // will eval to $SUCCESS
  ```
+ 
+ 
 * `$if:$then:$else:`: when if node eval to `$SUCCESS` the $then node is evaulate otherwise if $else node is pressent eval it
  ```javascript
  var tree = {
@@ -61,12 +66,16 @@ nodes:
   $else:$FAILURE,
  } // will eval to $RUNNING
  ```
+ 
+ 
 * `$inv` invert $SUCCESS => `$FAILURE`, `$FAILURE` => `$SUCCESS`
  ```javascript
  var tree = { 
    $inv:$SUCCESS
  } // will evel to $FAILURE
  ```
+ 
+ 
 * Actions takes actor and memort as input and return state:
  * Named: actions can be named by palcing them in a `$act` section of tree: 
  ``` javascript
