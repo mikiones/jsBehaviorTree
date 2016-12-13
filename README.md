@@ -27,63 +27,74 @@ Example tree
 ```
 
 states:
-  1. $SUCCESS = success node
-  2. $FAILURE = failure node
-  3. $RUNNING = running node
+  1. `$SUCCESS` = success node
+  2. `$FAILURE` = failure node
+  3. `$RUNNING` = running node
 
 nodes:
-1. $seq: sequence takes array of childs as input
+1. `$seq`: sequence takes array of childs as input
 ```javascript
     var tree = {
       $seq:[$SUCCESS,$SUCCESS,$RUNNING]
-    }
+    } // will eval to $RUNNING (sequnce is running until faiure or running
 ```
-2. $sel: selector takss array as input
+2. `$sel`: selector takss array as input
 ```javascript
   var tree = {
-    $sel:[$FAILURE,$SUCCESS,$RUNNING]
-  }
+    $sel:[$FAILURE, $SUCCESS, $RUNNING]
+  } // will eval to $SUCCESS as selector chose first not failing path
 ```
 
-3. $node : a row node
+3. `$node` : a row node
 ```javascript
 var tree = {
     $des:"a succesful node",
     $node:$SUCCESS,
-  }
+  } // will eval to $SUCCESS
 ```
-
-Actions:
-actoins are a function wiych to takses a actor and a memory as input and return valid state
-var a = function (actor, memory) {
-  return $SUCCESS
-}
-
-and can be definded inline in tree:
-{
-  $sel[(act,mem) => $RUNNING,$SUCCESS],
-}
-or as a nemed action
-{
-  $sel: ["action1",SUCCESS],
-  $act: {
-    action1:function(actor,memory) {
-      return $SUCCESS;
-    }
-  },
-}
-
-$des: a descryption tag helps with debuging :
-let tree = {
-  $des:"a trunk of tree",
-  $sel:[{$node:$SUCCESS,$des:"a node in tree"}],
-}
-
-
-if - then -else
-{
-  $des:"a stupid if then else tree",
+4. `$if:$then:$else:`: when if node eval to `$SUCCESS` the $then node is evaulate otherwise if $else node is pressent eval it
+```javascript
+var tree = {
+  $des = "a if - then - else ",
   $if:$SUCCESS,
-  $THEN:$RUNNING,
-  $else:$FAILURE
-}
+  $then:$RUNNING,
+  $else:$FAILURE,
+} // will eval to $RUNNING
+```
+5. `$inv` invert $SUCCESS => `$FAILURE`, `$FAILURE` => `$SUCCESS`
+```javascript
+var tree = { 
+  $inv:$SUCCESS
+} // will evel to $FAILURE
+```
+6. Actions takes actor and memort as input and return state:
+ i. Named: actions can be named by palcing them in a `$act` section of tree: 
+ ``` javascript
+ let tree = {
+  $sel:["action"],
+  $act:{
+    action:function(actor, memory) {return $SUCCESS},
+  }
+ } // will eval to SUCCESS.
+ ```
+ ii. nested 
+ ```javascript
+  let tree = {
+    $sel:["a.nested.action"],
+    $act: {
+      a: {
+       nested:{
+        action: () => $SUCCESS;
+       }
+      }
+    }
+  } // eval to $SUCCESS
+ ```
+ 
+ iii. anoumynous/inline
+ ```javascript
+ let tree = {
+  $sel:[()=>$SUCCESS]
+ } // eval to $SUCCESS
+ ```
+
